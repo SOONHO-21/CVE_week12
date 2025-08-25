@@ -1,0 +1,17 @@
+services:
+  apache:
+    build: ./apache
+    container_name: apache_confusion
+    ports:
+      - "8080:80"
+    depends_on:
+      - php
+    volumes:
+      - ./php:/var/www/html
+      - ./apache/.htpasswd:/usr/local/apache2/.htpasswd
+
+  php:
+    image: php:8.2-fpm
+    container_name: php_fpm
+    volumes:
+      - ./php:/var/www/html

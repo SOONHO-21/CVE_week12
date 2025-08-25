@@ -1,0 +1,53 @@
+블로그 자료 주소
+https://blog.orange.tw/posts/2024-08-confusion-attacks-en/
+https://i.blackhat.com/BH-US-24/Presentations/US24-Orange-Confusion-Attacks-Exploiting-Hidden-Semantic-Thursday.pdf
+
+👉 예시 사용자: admin / password
+👉 아래 해시는 htpasswd -nbB admin password 로 생성한 bcrypt 해시입니다.
+admin:$2y$05$7ZOzW4UT3h1kGeJyO/tk..be7mG6D9z8Yb6Skz5iX9d6iCxlAtG7a
+
+request_rec는 아파치(Apache) HTTP 서버에서 현재 들어온 요청에 대한 모든 정보를 담고 있는 중요한 구조체입니다. 모듈이 핸들러 함수를 호출할 때 인자로 전달되며, 요청의 풀(pool), 연결(connection), 가상 호스트(server), 파일 경로(filename), 요청 URI(the_request), 핸들러 이름(handler), 콘텐츠 유형(content_type) 등 다양한 정보를 담고 있습니다. 
+주요 구성 요소:
+apr_pool_t *pool: 요청과 관련된 메모리 풀을 가리킵니다. 
+conn_rec *connection: 클라이언트와의 연결 정보를 담고 있는 구조체에 대한 포인터입니다. 
+server_rec *server: 이 요청을 처리하는 가상 호스트(가상 서버) 정보를 담고 있습니다. 
+char *the_request: 요청 줄의 원본 문자열(예: "GET /path HTTP/1.1")을 포함합니다. 
+char *filename: 요청된 문서의 파일 경로를 포함합니다. 
+char *handler: 이 요청을 처리할 핸들러 이름을 지정할 수 있습니다. 
+char *content_type: 요청이나 응답의 콘텐츠 유형을 나타냅니다 (예: "text/html"). 
+ap_method_mask_t allowed: 허용된 HTTP 메서드(GET, POST 등)를 나타냅니다. 
+활용 예시:
+모듈은 request_rec 구조체를 통해 요청의 URI를 가져와 mod_rewrite와 같은 모듈에서 조건부 로직을 수행할 수 있습니다. 
+r->handler에 핸들러 이름을 지정하여 특정 요청을 처리할 수 있습니다. 
+r->content_type을 설정하여 응답 콘텐츠 유형을 지정할 수 있습니다. 
+
+
+디렉토리 구조
+week12/
+ ├─ docker-compose.yml
+ ├─ apache/
+ │   ├─ Dockerfile
+ │   ├─ vulnerable.conf
+ │   └─ .htpasswd
+ └─ php/
+     ├─ config.php
+     ├─ index.php
+     ├─ secret.php
+     ├─ test.php
+     └─ upload.php
+
+
+admin password md5 암호 생성
+htpasswd -nbm admin password
+admin:$apr1$dK.3hx.o$mKyyIrHIyaZscutIquuko/
+
+
+docker rm -f confusion
+docker build -t week12-confusion .
+docker run -d -p 8080:80 --name confusion week12-confusion
+
+
+docker-compose down -v
+docker-compose up --build
+
+docker-compose build --no-cache && docker-compose up -d
