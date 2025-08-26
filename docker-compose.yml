@@ -9,11 +9,9 @@ services:
     volumes:
       - ./php:/var/www/html
       - ./apache/.htpasswd:/usr/local/apache2/.htpasswd
-      - ./static:/var/www/static
 
   php:
     image: php:8.2-fpm
     container_name: php_fpm
     volumes:
       - ./php:/var/www/html
-      - ./static:/var/www/static

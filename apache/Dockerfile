@@ -23,5 +23,7 @@ RUN mkdir -p /var/user/alice /var/user/bob /var/user/test \
  && printf "name: bob\nrole: admin\n"    > /var/user/bob/profile.yml \
  && printf "name: test\nrole: demo\n"    > /var/user/test/profile.yml
 
+RUN apt-get update && apt-get install -y libjs-jquery libjs-bootstrap php-pear
+
 EXPOSE 80
 CMD ["httpd-foreground"]
