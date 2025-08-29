@@ -17,6 +17,7 @@ RUN echo "ServerName localhost" >> /usr/local/apache2/conf/httpd.conf \
  && echo "Include conf/extra/vulnerable.conf" >> /usr/local/apache2/conf/httpd.conf
 
 # Path Truncation 테스트용 파일 생성
+# 유저'alice' 전용 secret 파일 생성
 RUN mkdir -p /var/user/alice /var/user/bob /var/user/test \
  && printf "name: alice\nrole: normal\n" > /var/user/alice/profile.yml \
  && printf "secret: alice top-secret\n" > /var/user/alice/secret.yml \

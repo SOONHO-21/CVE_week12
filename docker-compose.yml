@@ -9,9 +9,11 @@ services:
     volumes:
       - ./php:/var/www/html
       - ./apache/.htpasswd:/usr/local/apache2/.htpasswd
+      - ./gadgets:/usr/share/php  #./gadgets:/usr/share/php 같은 공유 볼륨을 두 컨테이너에 같이 마운트해서, Apache와 php-fpm 모두 동일한 /usr/share/php를 바라보게 함
 
   php:
     image: php:8.2-fpm
     container_name: php_fpm
     volumes:
       - ./php:/var/www/html
+      - ./gadgets:/usr/share/php
